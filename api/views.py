@@ -3,7 +3,11 @@ from django.http import HttpResponse
 from rest_framework.response import Response
 from django.template import loader
 from django.contrib.auth import authenticate, login
-from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.csrf import csrf_protect, csrf_exempt
+from .forms import UserRegistrationForm
+from django.views.generic.edit import CreateView
+from django.urls import reverse_lazy
+from django.contrib.auth.forms import AuthenticationForm
 
 
 # Create your views here.
@@ -12,13 +16,13 @@ def home(request):
     return HttpResponse(template.render())
 
 
-def register(request):
-    template = loader.get_template("register.html")
-    return HttpResponse(template.render())
+class UserRegistrationView(CreateView):
+    form_class = UserRegistrationForm
+    template_name = "register.html"
+    success_url = reverse_lazy("home")
 
 
-@csrf_protect
-def login(request):
+def login_view(request):
     if request.method == "POST":
         username = request.POST["username"]
         password = request.POST["password"]
@@ -27,17 +31,7 @@ def login(request):
             login(request, user)
             return redirect("home")
         else:
-            return render(
-                request,
-                "login.html",
-                {"error_message": "Invalid username or password."},
-            )
-
-    elif request.method == "GET":
-        template = loader.get_template("login.html")
-        return HttpResponse(template.render())
-
-
-def login(request):
-    template = loader.get_template("login.html")
-    return HttpResponse(template.render())
+            error_message = "Kullanıcı adı veya şifre yanlış."
+            return render(request, "login.html", {"error_message": error_message})
+    else:
+        return render(request, "login.html")
