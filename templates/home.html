@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+
+</head>
+
+<body>
+    <!-- navbar -->
+    <div class="container-fluid">
+        <ul class="nav bg-info d-flex justify-content-center">
+            <li class="nav-item">
+                <a class="nav-link link-light" href="/">ANASAYFA</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link link-light" href="/">HABER</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link link-light" href="/">MAKALE</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link link-light" href="/">TAVSİYELER</a>
+            </li>
+
+            <!-- profil iconu ve bağlantıları -->
+            {% if user.is_authenticated %}
+            <li class="nav-item">
+                <a class="nav-link link-light" href="">
+                    <i class="fa fa-user"></i> Profilim
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link link-light" href="">
+                    <i class="fa fa-sign-out"></i> Çıkış Yap
+                </a>
+            </li>
+            {% else %}
+            <li class="nav-item">
+                <a class="nav-link link-light" href="{% url 'login' %}">
+                    <i class="fa fa-sign-in"></i> Giriş Yap
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link link-light" href="{% url 'register' %}">
+                    <i class="fa fa-user-plus"></i> Kayıt Ol
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+    <div>
+        <div class="container">
+            <div class="row">
+                {% for post in posts %}
+                <div class="col-md-4">
+                    <div class="card mb-4 shadow-sm">
+                        <img src="{{ post.image.url }}" class="card-img-top" alt="{{ post.title }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ post.title }}</h5>
+                            <p class="card-text">{{ post.content|truncatechars:150 }}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group">
+                                    <a href="{% url 'post_detail' post.slug %}"
+                                        class="btn btn-sm btn-outline-secondary">Devamını Oku</a>
+                                </div>
+                                <small class="text-muted">{{ post.pub_date|date:"d/m/Y" }}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% if forloop.counter|divisibleby:3 %}
+            </div>
+            <div class="row">
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+    {% block content %}
+    {% endblock %}
+</body>
+
+</html>
