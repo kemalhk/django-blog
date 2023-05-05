@@ -24,14 +24,17 @@ class UserRegistrationView(CreateView):
 
 def login_view(request):
     if request.method == "POST":
-        username = request.POST["username"]
-        password = request.POST["password"]
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return redirect("home")
-        else:
-            error_message = "Kullanıcı adı veya şifre yanlış."
-            return render(request, "login.html", {"error_message": error_message})
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data["username"]
+            password = form.cleaned_data["password"]
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect("home")
+            else:
+                error_message = "Kullanıcı adı veya şifre yanlış."
+                return render(request, "login.html", {"error_message": error_message})
     else:
-        return render(request, "login.html")
+        form = AuthenticationForm()
+        return render(request, "login.html", {"form": form})
