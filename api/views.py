@@ -34,7 +34,7 @@ def login_view(request):
                 return redirect("home")
             else:
                 error_message = "Kullanıcı adı veya şifre yanlış."
-                return render(request, "login.html", {"error_message": error_message})
+                return render(request, "login.html", locals())
     else:
         form = AuthenticationForm()
-        return render(request, "login.html", {"form": form})
+        return render(request, "login.html", locals())
