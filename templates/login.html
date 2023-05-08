@@ -19,8 +19,13 @@
 
       <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
       <div class="text-center mt-2">
-        <p>Hesabınız yoksa <a href="{% url 'register' %}">Giriş Yap</a></p>
+        <p>Hesabınız yoksa <a href="{% url 'register' %}">Kayıt Ol</a></p>
     </div>
+    {% if error_message %}
+    <div class="alert alert-danger mt-3">
+      {{ error_message }}
+    </div>
+  {% endif %}
     </form>
   </body>
 </html>

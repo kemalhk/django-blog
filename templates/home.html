@@ -61,11 +61,13 @@
     <li>
         <h2>{{ post.title }}</h2>
         <p>{{ post.content }}</p>
+        <!-- yorumların listelenmesi için -->
         <ul>
-            {% for comment in post.comment_set.all %}
+            {% for comment in post.comments.all %}
                 <li>{{ comment.content }}</li>
             {% endfor %}
-            </ul>
+        </ul>
+        <!--  -->
     </li>
 {% endfor %}
 </ul>
