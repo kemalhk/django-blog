@@ -28,28 +28,23 @@
 
             <!-- profil iconu ve bağlantıları -->
             {% if user.is_authenticated %}
-            <li class="nav-item">
-                <a class="nav-link link-light" href="">
-                    <i class="fa fa-user"></i> Profilim
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link link-light" href="">
-                    <i class="fa fa-sign-out"></i> Çıkış Yap
-                </a>
-            </li>
-            {% else %}
-            <li class="nav-item">
-                <a class="nav-link link-light" href="{% url 'login' %}">
-                    <i class="fa fa-sign-in"></i> Giriş Yap
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link link-light" href="{% url 'register' %}">
-                    <i class="fa fa-user-plus"></i> Kayıt Ol
-                </a>
-            </li>
-            {% endif %}
+<li class="nav-item">
+    <a class="nav-link link-light" href="{% url 'logout' %}">
+        <i class="fa fa-sign-out"></i> Çıkış Yap
+    </a>
+</li>
+{% else %}
+<li class="nav-item">
+    <a class="nav-link link-light" href="{% url 'login' %}">
+        <i class="fa fa-sign-in"></i> Giriş Yap
+    </a>
+</li>
+<li class="nav-item">
+    <a class="nav-link link-light" href="{% url 'register' %}">
+        <i class="fa fa-user-plus"></i> Kayıt Ol
+    </a>
+</li>
+{% endif %}
         </ul>
     </div>
     <div>
