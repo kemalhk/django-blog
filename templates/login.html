@@ -2,22 +2,65 @@
 <html>
 
 <head>
-    <title>{% block title %}Login{% endblock %}</title>
-    {% load bootstrap5 %}
+    <title>{% block title %}Register{% endblock %}</title>
+    {% load django_bootstrap5 %}
     {% bootstrap_css %}
     {% bootstrap_javascript %}
+    {% bootstrap_messages %}
 
 </head>
 
 <body>
 
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
+    
 
-        <button type="submit">Giriş Yap</button>
-    </form>
 
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <h2 class="text-center">Kayıt Ol</h2>
+
+                <form method="post" class="form">
+                    {% csrf_token %}
+
+                    <div class="form-group">
+                        <label for="{{ form.username.id_for_label }}">Kullanıcı Adı</label>
+                        {{ form.username }}
+                        {{ form.username.errors }}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="{{ form.email.id_for_label }}">E-posta Adresi</label>
+                        {{ form.email }}
+                        {{ form.email.errors }}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="{{ form.password1.id_for_label }}">Şifre</label>
+                        {{ form.password1 }}
+                        {{ form.password1.errors }}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="{{ form.password2.id_for_label }}">Şifre Tekrar</label>
+                        {{ form.password2 }}
+                        {{ form.password2.errors }}
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Giriş Yap</button>
+
+                    <div class="text-center mt-2">
+                        <p>Hesabınız yoksa <a href="{% url 'register' %}">Giriş Yap</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    {% block content %}
+    {% endblock %}
 
 </body>
 
