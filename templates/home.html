@@ -30,6 +30,11 @@
             {% if user.is_authenticated %}
 <li class="nav-item">
     <a class="nav-link link-light" href="{% url 'logout' %}">
+        <i class="fa fa-sign-out"></i> Profilim
+    </a>
+</li>
+<li class="nav-item">
+    <a class="nav-link link-light" href="{% url 'logout' %}">
         <i class="fa fa-sign-out"></i> Çıkış Yap
     </a>
 </li>
@@ -47,35 +52,32 @@
 {% endif %}
         </ul>
     </div>
-    <div>
-        <div class="container">
-            <div class="row">
-                {% for post in posts %}
-                <div class="col-md-4">
-                    <div class="card mb-4 shadow-sm">
-                        <img src="{{ post.image.url }}" class="card-img-top" alt="{{ post.title }}">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ post.title }}</h5>
-                            <p class="card-text">{{ post.content|truncatechars:150 }}</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="btn-group">
-                                    <a href="{% url 'post_detail' post.slug %}"
-                                        class="btn btn-sm btn-outline-secondary">Devamını Oku</a>
-                                </div>
-                                <small class="text-muted">{{ post.pub_date|date:"d/m/Y" }}</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {% if forloop.counter|divisibleby:3 %}
-            </div>
-            <div class="row">
-                {% endif %}
-                {% endfor %}
-            </div>
-        </div>
 
-    </div>
+
+<!-- post listeleme  -->
+{% if latest_posts %}
+<ul>
+{% for post in latest_posts %}
+    <li>
+        <h2>{{ post.title }}</h2>
+        <p>{{ post.content }}</p>
+        <ul>
+            {% for comment in post.comment_set.all %}
+                <li>{{ comment.content }}</li>
+            {% endfor %}
+            </ul>
+    </li>
+{% endfor %}
+</ul>
+{% else %}
+<p>No posts found.</p>
+{% endif %}
+
+
+    
+
+
+
     {% block content %}
     {% endblock %}
 </body>

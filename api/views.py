@@ -16,7 +16,9 @@ from .models import Category, Comment, Post
 
 
 def home(request):
-    return render(request, "home.html")
+    latest_posts = Post.objects.order_by("-created_at")[:12]
+    context = {"latest_posts": latest_posts}
+    return render(request, "home.html", context)
 
 
 class UserRegistrationView(CreateView):
