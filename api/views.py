@@ -29,12 +29,10 @@ def login_view(request):
     if request.method == "POST":
         username = request.POST["username"]
         password = request.POST["password"]
-        """ username = form.cleaned_data["username"]
-        password = form.cleaned_data["password"] """
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
-            token, created = Token.objects.get_or_create(user=user)
+            """token, created = Token.objects.get_or_create(user=user)"""
             login(request, user)
 
             return redirect("home")
@@ -46,12 +44,12 @@ def login_view(request):
 
 
 def logoutUser(request):
-    # Kullanıcının tokenı varsa, tokenı silin
-    if request.user.is_authenticated:
-        try:
-            token = Token.objects.get(user=request.user)
-            token.delete()
-        except Token.DoesNotExist:
-            pass
+    # Kullanıcının tokenı varsa tokenı sil
+    """if request.user.is_authenticated:
+    try:
+        token = Token.objects.get(user=request.user)
+        token.delete()
+    except Token.DoesNotExist:
+        pass"""
     logout(request)
     return redirect("home")
