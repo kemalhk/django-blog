@@ -74,6 +74,7 @@ def makale(request):
     print(makale_category)
     makale_posts = Post.objects.filter(category_title=makale_category)
     print(makale_posts)
+
     return render(request, "makale.html", locals())
 
 

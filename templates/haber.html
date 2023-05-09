@@ -1,77 +1,73 @@
 <!DOCTYPE html>
 <html>
-
-<head>
+  <head>
     <title>{% block title %}{% endblock %}</title>
-    {% load bootstrap5 %}
-    {% bootstrap_css %}
-    {% bootstrap_javascript %}
+    {% load bootstrap5 %} {% bootstrap_css %} {% bootstrap_javascript %}
+  </head>
 
-</head>
-
-<body>
+  <body>
     <!-- navbar -->
     <div class="container-fluid">
-        <ul class="nav bg-info d-flex justify-content-center">
-            <li class="nav-item">
-                <a class="nav-link link-light" href="/">ANASAYFA</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link link-light" href="{% url 'haber' %}">HABER</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link link-light" href="{% url 'makale' %}">MAKALE</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link link-light" href="{% url 'tavsiyeler' %}">TAVSİYELER</a>
-            </li>
+      <ul class="nav bg-info d-flex justify-content-center">
+        <li class="nav-item">
+          <a class="nav-link link-light" href="/">ANASAYFA</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link link-light" href="{% url 'haber' %}">HABER</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link link-light" href="{% url 'makale' %}">MAKALE</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link link-light" href="{% url 'tavsiyeler' %}"
+            >TAVSİYELER</a
+          >
+        </li>
 
-            <!-- profil iconu ve bağlantıları -->
-            {% if user.is_authenticated %}
-<li class="nav-item">
-    <a class="nav-link link-light" href="{% url 'logout' %}">
-        <i class="fa fa-sign-out"></i> Profilim
-    </a>
-</li>
-<li class="nav-item">
-    <a class="nav-link link-light" href="{% url 'logout' %}">
-        <i class="fa fa-sign-out"></i> Çıkış Yap
-    </a>
-</li>
-{% else %}
-<li class="nav-item">
-    <a class="nav-link link-light" href="{% url 'login' %}">
-        <i class="fa fa-sign-in"></i> Giriş Yap
-    </a>
-</li>
-<li class="nav-item">
-    <a class="nav-link link-light" href="{% url 'register' %}">
-        <i class="fa fa-user-plus"></i> Kayıt Ol
-    </a>
-</li>
-{% endif %}
-        </ul>
+        <!-- profil iconu ve bağlantıları -->
+        {% if user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link link-light" href="{% url 'logout' %}">
+            <i class="fa fa-sign-out"></i> Profilim
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link link-light" href="{% url 'logout' %}">
+            <i class="fa fa-sign-out"></i> Çıkış Yap
+          </a>
+        </li>
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link link-light" href="{% url 'login' %}">
+            <i class="fa fa-sign-in"></i> Giriş Yap
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link link-light" href="{% url 'register' %}">
+            <i class="fa fa-user-plus"></i> Kayıt Ol
+          </a>
+        </li>
+        {% endif %}
+      </ul>
     </div>
 
     <div class="row">
-        {% for post in haber_posts %}
-        <div class="col-sm-4 mb-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">{{ post.title }}</h5>
-                    <p class="card-text">{{ post.content|truncatechars:50 }}</p>
-                    <a href="{% url 'post_detail' pk=post.pk %}" class="btn btn-primary">Go somewhere</a>
-                </div>
-            </div>
+      {% for post in haber_posts %}
+      <div class="col-sm-4 mb-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">{{ post.title }}</h5>
+            <p class="card-text">{{ post.content|truncatechars:50 }}</p>
+            <a href="{% url 'post_detail' pk=post.pk %}" class="btn btn-primary"
+              >Habere Git</a
+            >
+          </div>
         </div>
-        {% endfor %}
+      </div>
+      {% endfor %}
     </div>
-    
 
-
-
-    
-   <!--  {% for post in haber_posts %}
+    <!--  {% for post in haber_posts %}
 <div class="card" style="width: 18rem;">
   <img src="..." class="card-img-top" alt="...">
 
@@ -87,31 +83,5 @@
   </ul> 
 </div>
 {% endfor %} -->
-
-
-
-
-<!-- post listeleme  -->
-<h1>Haberler</h1>
-
-  <ul>
-    {% for post in haber_posts %}
-    <h2>{{ post.title }}</h2>
-    <p>{{ post.content }}</p>
-    <ul>
-        {% for comment in post.comments.all %}
-            <li>{{ comment.content }}</li>
-        {% endfor %}
-    </ul>
-  {% endfor %}
-  </ul>
-
-
-
-
-
-
-    
-</body>
-
+  </body>
 </html>

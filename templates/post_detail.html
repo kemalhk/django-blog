@@ -1,6 +1,82 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{% block title %}{{ post.title }}{% endblock %}</title>
+    {% load bootstrap5 %} {% bootstrap_css %} {% bootstrap_javascript %}
+  </head>
 
-{% block content %}
-    <h1>{{ post.title }}</h1>
-    <p>{{ post.content }}</p>
-{% endblock %}
+  <body>
+    <!-- navbar -->
+    <div class="container-fluid">
+      <ul class="nav bg-info d-flex justify-content-center">
+        <li class="nav-item">
+          <a class="nav-link link-light" href="/">ANASAYFA</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link link-light" href="{% url 'haber' %}">HABER</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link link-light" href="{% url 'makale' %}">MAKALE</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link link-light" href="{% url 'tavsiyeler' %}"
+            >TAVSİYELER</a
+          >
+        </li>
+
+        <!-- profil iconu ve bağlantıları -->
+        {% if user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link link-light" href="{% url 'logout' %}">
+            <i class="fa fa-sign-out"></i> Profilim
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link link-light" href="{% url 'logout' %}">
+            <i class="fa fa-sign-out"></i> Çıkış Yap
+          </a>
+        </li>
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link link-light" href="{% url 'login' %}">
+            <i class="fa fa-sign-in"></i> Giriş Yap
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link link-light" href="{% url 'register' %}">
+            <i class="fa fa-user-plus"></i> Kayıt Ol
+          </a>
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+
+    {% block content %}
+    <div class="container my-4">
+      <div class="row">
+        <div class="col-md-8">
+          <div class="card mb-4">
+            <div class="card-body">
+              <h1 class="card-title">{{ post.title }}</h1>
+              <p class="card-text">{{ post.content }}</p>
+            </div>
+          </div>
+          <div class="card mb-4">
+            <div class="card-body">
+              <h4 class="card-title">{{ post.comments.count }} yorum</h4>
+              {% for comment in post.comments.all %}
+              <div class="media mb-3">
+                <div class="media-body">
+                  <h5 class="mt-0">{{ comment.author.username }}</h5>
+                  <p>{{ comment.content }}</p>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endblock %}
+  </body>
+</html>
