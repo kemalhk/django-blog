@@ -91,6 +91,7 @@ def post_detail(request, pk):
     return render(request, "post_detail.html", {"post": post})
 
 
+@login_required
 def add_comment_to_post(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if request.method == "POST":
@@ -99,6 +100,7 @@ def add_comment_to_post(request, pk):
             comment = form.save(commit=False)
             comment.post = post
             comment.author = request.user
+            comment.content = form.cleaned_data["yorum"]  # burada değişiklik yapıldı
             comment.save()
             return redirect("post_detail", pk=post.pk)
     else:

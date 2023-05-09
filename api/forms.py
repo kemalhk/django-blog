@@ -26,6 +26,17 @@ class UserRegistrationForm(UserCreationForm):
 
 
 class CommentForm(forms.ModelForm):
+    yorum = forms.CharField(
+        widget=forms.Textarea(
+            attrs={
+                "class": "forms-control",
+                "placeholder": "comment here ...",
+                "rows": "4",
+            }
+        ),
+        required=True,
+    )
+
     class Meta:
         model = Comment
-        fields = ("content",)
+        fields = ("yorum",)

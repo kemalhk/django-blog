@@ -70,6 +70,7 @@
                   <div class="media-body">
                     <h5 class="mt-0">{{ comment.author.username }}</h5>
                     <p>{{ comment.content }}</p>
+                    <p class="justify-content-end">{{comment.created_at|date:"d M,Y"}}</p>
                   </div>
                 </div>
                 {% endfor %}
@@ -78,7 +79,8 @@
                   <div class="card-body">
                     <form method="POST" action="{% url 'add_comment' post.pk %}">
                       {% csrf_token %}
-                      {{ form.as_p }}
+                      <!-- {{ form.as_p }} -->
+                      {{ form.yorum }}
                       <!-- <div class="form-group">
                         <label for="comment_content">Yorum yaz:</label>
                         <textarea class="form-control" id="comment_content" name="comment_content" rows="3"></textarea>
