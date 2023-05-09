@@ -30,5 +30,10 @@ urlpatterns = [
     path("makale/", views.makale, name="makale"),
     path("tavsiyeler/", views.tavsiyeler, name="tavsiyeler"),
     path("post_detail/<int:pk>/", views.post_detail, name="post_detail"),
+    path(
+        "post_detail/<int:pk>/add_comment/",
+        views.add_comment_to_post,
+        name="add_comment",
+    ),
 ]
 # path("register/", views.register, name="register"),
