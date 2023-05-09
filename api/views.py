@@ -1,14 +1,18 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
-from rest_framework.response import Response
+
+# from django.http import HttpResponse
+# from rest_framework.response import Response
 from django.template import loader
 from django.contrib.auth import authenticate, login, logout
-from rest_framework.authtoken.models import Token
-from django.views.decorators.csrf import csrf_protect, csrf_exempt
+from django.contrib.auth.decorators import login_required
+
+# from rest_framework.authtoken.models import Token
+# from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from .forms import UserRegistrationForm
 from django.views.generic.edit import CreateView
 from django.urls import reverse_lazy
-from django.contrib.auth.forms import AuthenticationForm
+
+# from django.contrib.auth.forms import AuthenticationForm
 from .models import Category, Comment, Post
 
 
@@ -55,3 +59,27 @@ def logoutUser(request):
         pass"""
     logout(request)
     return redirect("home")
+
+
+def haber(request):
+    haber_category = Category.objects.filter(category_title="Haber").first()
+    print(haber_category)
+    haber_posts = Post.objects.filter(category_title=haber_category)
+    print(haber_posts)
+    return render(request, "haber.html", locals())
+
+
+def makale(request):
+    makale_category = Category.objects.filter(category_title="Makale").first()
+    print(makale_category)
+    makale_posts = Post.objects.filter(category_title=makale_category)
+    print(makale_posts)
+    return render(request, "makale.html", locals())
+
+
+def tavsiyeler(request):
+    tavsiyeler_category = Category.objects.filter(category_title="Tavsiyeler").first()
+    print(tavsiyeler_category)
+    tavsiyeler_posts = Post.objects.filter(category_title=tavsiyeler_category)
+    print(tavsiyeler_posts)
+    return render(request, "tavsiyeler.html", locals())
