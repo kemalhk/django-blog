@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+
+</head>
+
+<body>
+    <!-- navbar -->
+    <div class="container-fluid">
+        <ul class="nav bg-info d-flex justify-content-center">
+            <li class="nav-item">
+                <a class="nav-link link-light" href="/">ANASAYFA</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link link-light" href="{% url 'haber' %}">HABER</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link link-light" href="{% url 'makale' %}">MAKALE</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link link-light" href="{% url 'tavsiyeler' %}">TAVSİYELER</a>
+            </li>
+
+            <!-- profil iconu ve bağlantıları -->
+            {% if user.is_authenticated %}
+<li class="nav-item">
+    <a class="nav-link link-light" href="{% url 'logout' %}">
+        <i class="fa fa-sign-out"></i> Profilim
+    </a>
+</li>
+<li class="nav-item">
+    <a class="nav-link link-light" href="{% url 'logout' %}">
+        <i class="fa fa-sign-out"></i> Çıkış Yap
+    </a>
+</li>
+{% else %}
+<li class="nav-item">
+    <a class="nav-link link-light" href="{% url 'login' %}">
+        <i class="fa fa-sign-in"></i> Giriş Yap
+    </a>
+</li>
+<li class="nav-item">
+    <a class="nav-link link-light" href="{% url 'register' %}">
+        <i class="fa fa-user-plus"></i> Kayıt Ol
+    </a>
+</li>
+{% endif %}
+        </ul>
+    </div>
+
+
+<!-- post listeleme  -->
+<h1>Makale</h1>
+
+  <ul>
+    {% for post in makale_posts %}
+    <h2>{{ post.title }}</h2>
+    <p>{{ post.content }}</p>
+    <ul>
+        {% for comment in post.comments.all %}
+            <li>{{ comment.content }}</li>
+        {% endfor %}
+    </ul>
+  {% endfor %}
+  </ul>
+
+
+
+
+
+
+    
+</body>
+
+</html>

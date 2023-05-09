@@ -26,5 +26,8 @@ urlpatterns = [
     path("register/", views.UserRegistrationView.as_view(), name="register"),
     path("login/", views.login_view, name="login"),
     path("logout/", views.logoutUser, name="logout"),
+    path("haber/", views.haber, name="haber"),
+    path("makale/", views.makale, name="makale"),
+    path("tavsiyeler/", views.tavsiyeler, name="tavsiyeler"),
 ]
 # path("register/", views.register, name="register"),
