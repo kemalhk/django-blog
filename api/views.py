@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 
 # from django.http import HttpResponse
 # from rest_framework.response import Response
@@ -83,3 +83,8 @@ def tavsiyeler(request):
     tavsiyeler_posts = Post.objects.filter(category_title=tavsiyeler_category)
     print(tavsiyeler_posts)
     return render(request, "tavsiyeler.html", locals())
+
+
+def post_detail(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    return render(request, "post_detail.html", {"post": post})

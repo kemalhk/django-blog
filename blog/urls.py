@@ -29,5 +29,6 @@ urlpatterns = [
     path("haber/", views.haber, name="haber"),
     path("makale/", views.makale, name="makale"),
     path("tavsiyeler/", views.tavsiyeler, name="tavsiyeler"),
+    path("post_detail/<int:pk>/", views.post_detail, name="post_detail"),
 ]
 # path("register/", views.register, name="register"),

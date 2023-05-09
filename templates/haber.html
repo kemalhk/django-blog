@@ -53,6 +53,43 @@
         </ul>
     </div>
 
+    <div class="row">
+        {% for post in haber_posts %}
+        <div class="col-sm-4 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ post.title }}</h5>
+                    <p class="card-text">{{ post.content|truncatechars:50 }}</p>
+                    <a href="{% url 'post_detail' pk=post.pk %}" class="btn btn-primary">Go somewhere</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+
+
+
+    
+   <!--  {% for post in haber_posts %}
+<div class="card" style="width: 18rem;">
+  <img src="..." class="card-img-top" alt="...">
+
+  <div class="card-body">
+    <h5 class="card-title">{{ post.title }}</h5> 
+    <p class="card-text">{{ post.content }}</p>
+    <a href="#" class="btn btn-primary">Go somewhere</a>
+  </div>
+   <ul class="list-group list-group-flush">
+    {% for comment in post.comments.all %}
+    <li class="list-group-item">{{ comment.content }}</li>
+    {% endfor %}
+  </ul> 
+</div>
+{% endfor %} -->
+
+
+
 
 <!-- post listeleme  -->
 <h1>Haberler</h1>
