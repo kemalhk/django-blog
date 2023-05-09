@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>{% block title %}{% endblock %}</title>
+    <title>{% block title %}{{post.title}}{% endblock %}</title>
     {% load bootstrap5 %}
     {% bootstrap_css %}
     {% bootstrap_javascript %}
@@ -28,53 +28,48 @@
 
             <!-- profil iconu ve bağlantıları -->
             {% if user.is_authenticated %}
-<li class="nav-item">
-    <a class="nav-link link-light" href="{% url 'logout' %}">
-        <i class="fa fa-sign-out"></i> Profilim
-    </a>
-</li>
-<li class="nav-item">
-    <a class="nav-link link-light" href="{% url 'logout' %}">
-        <i class="fa fa-sign-out"></i> Çıkış Yap
-    </a>
-</li>
-{% else %}
-<li class="nav-item">
-    <a class="nav-link link-light" href="{% url 'login' %}">
-        <i class="fa fa-sign-in"></i> Giriş Yap
-    </a>
-</li>
-<li class="nav-item">
-    <a class="nav-link link-light" href="{% url 'register' %}">
-        <i class="fa fa-user-plus"></i> Kayıt Ol
-    </a>
-</li>
-{% endif %}
+            <li class="nav-item">
+                <a class="nav-link link-light" href="{% url 'profil' %}">
+                    <i class="fa fa-sign-out"></i> Profilim
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link link-light" href="{% url 'logout' %}">
+                    <i class="fa fa-sign-out"></i> Çıkış Yap
+                </a>
+            </li>
+            {% else %}
+            <li class="nav-item">
+                <a class="nav-link link-light" href="{% url 'login' %}">
+                    <i class="fa fa-sign-in"></i> Giriş Yap
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link link-light" href="{% url 'register' %}">
+                    <i class="fa fa-user-plus"></i> Kayıt Ol
+                </a>
+            </li>
+            {% endif %}
         </ul>
     </div>
 
 
-<!-- post listeleme  -->
-<h1>Makale</h1>
+    <!-- post listeleme  -->
 
-  <ul>
-    {% for post in makale_posts %}
-    <h2>{{ post.title }}</h2>
-    <p>{{ post.content }}</p>
-    <ul>
-        {% for comment in post.comments.all %}
-            <li>{{ comment.content }}</li>
+    <div class="row">
+        {% for post in makale_posts %}
+        <div class="col-sm-4 mb-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">{{ post.title }}</h5>
+              <p class="card-text">{{ post.content|truncatechars:50 }}</p>
+              <a href="{% url 'post_detail' pk=post.pk %}" class="btn btn-primary">Makaleye Git</a>
+            </div>
+          </div>
+        </div>
         {% endfor %}
-    </ul>
-  {% endfor %}
-  </ul>
+      </div>
 
-
-
-
-
-
-    
 </body>
 
 </html>

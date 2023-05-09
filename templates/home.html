@@ -29,7 +29,7 @@
             <!-- profil iconu ve bağlantıları -->
             {% if user.is_authenticated %}
 <li class="nav-item">
-    <a class="nav-link link-light" href="{% url 'logout' %}">
+    <a class="nav-link link-light" href="{% url 'profil' %}">
         <i class="fa fa-sign-out"></i> Profilim
     </a>
 </li>
@@ -54,34 +54,22 @@
     </div>
 
 
-<!-- post listeleme  -->
-{% if latest_posts %}
-<ul>
-{% for post in latest_posts %}
-    <li>
-        <h2>{{ post.title }}</h2>
-        <p>{{ post.content }}</p>
-        <!-- yorumların listelenmesi için -->
-        <ul>
-            {% for comment in post.comments.all %}
-                <li>{{ comment.content }}</li>
-            {% endfor %}
-        </ul>
-        <!--  -->
-    </li>
-{% endfor %}
-</ul>
-{% else %}
-<p>No posts found.</p>
-{% endif %}
+    <!-- postların anasayfada listelenmesi -->
+    <div class="row">
+        {% for post in latest_posts %}
+        <div class="col-sm-4 mb-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">{{ post.title }}</h5>
+              <p class="card-text">{{ post.content|truncatechars:50 }}</p>
+              <a href="{% url 'post_detail' pk=post.pk %}" class="btn btn-primary"
+                >{{post.category_title}} Git</a>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
 
-
-    
-
-
-
-    {% block content %}
-    {% endblock %}
 </body>
 
 </html>

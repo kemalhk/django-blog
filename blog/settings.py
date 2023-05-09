@@ -126,6 +126,12 @@ CSRF_COOKIE_SECURE = True
 
 STATIC_URL = "static/"
 STATIC_ROOT = "static"
+
+# yorum yapabilmek için giriş sayfasına yönlendirme
+LOGIN_URL = "/login/"
+LOGIN_REDIRECT_URL = "next"
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 

@@ -19,12 +19,6 @@ from .models import Category, Comment, Post
 # Create your views here.
 
 
-def home(request):
-    latest_posts = Post.objects.order_by("-created_at")[:12]
-    context = {"latest_posts": latest_posts}
-    return render(request, "home.html", context)
-
-
 class UserRegistrationView(CreateView):
     form_class = UserRegistrationForm
     template_name = "register.html"
@@ -40,8 +34,10 @@ def login_view(request):
         if user is not None:
             """token, created = Token.objects.get_or_create(user=user)"""
             login(request, user)
+            # kullanıcı yorum yapmak için giriş yaptıysa direkt bulunduğu sayfaya yönlendirme
+            redirect_to = request.GET.get("next", "home")
+            return redirect(redirect_to)
 
-            return redirect("home")
         else:
             error_message = "Kullanıcı adı veya şifre yanlış."
             return render(request, "login.html", locals())
@@ -61,34 +57,47 @@ def logoutUser(request):
     return redirect("home")
 
 
+def home(request):
+    # anasayfada listelenicek post sayısı
+    latest_posts = Post.objects.order_by("-created_at")[:12]
+    context = {"latest_posts": latest_posts}
+    return render(request, "home.html", locals())
+
+
 def haber(request):
     haber_category = Category.objects.filter(category_title="Haber").first()
-    print(haber_category)
-    haber_posts = Post.objects.filter(category_title=haber_category)
-    print(haber_posts)
+    # print(haber_category)
+    haber_posts = Post.objects.filter(category_title=haber_category).order_by(
+        "-created_at"
+    )
+    # print(haber_posts)
     return render(request, "haber.html", locals())
 
 
 def makale(request):
     makale_category = Category.objects.filter(category_title="Makale").first()
-    print(makale_category)
-    makale_posts = Post.objects.filter(category_title=makale_category)
-    print(makale_posts)
+    makale_posts = Post.objects.filter(category_title=makale_category).order_by(
+        "-created_at"
+    )
 
     return render(request, "makale.html", locals())
 
 
 def tavsiyeler(request):
     tavsiyeler_category = Category.objects.filter(category_title="Tavsiyeler").first()
-    print(tavsiyeler_category)
-    tavsiyeler_posts = Post.objects.filter(category_title=tavsiyeler_category)
-    print(tavsiyeler_posts)
+    tavsiyeler_posts = Post.objects.filter(category_title=tavsiyeler_category).order_by(
+        "-created_at"
+    )
     return render(request, "tavsiyeler.html", locals())
 
 
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
-    return render(request, "post_detail.html", {"post": post})
+    return render(request, "post_detail.html", locals())
+
+
+def profil(request):
+    return render(request, "profil.html", locals())
 
 
 @login_required
@@ -105,6 +114,13 @@ def add_comment_to_post(request, pk):
             return redirect("post_detail", pk=post.pk)
     else:
         form = CommentForm()
+
+    # kullanıcı giriş yapmamış ise, login sayfasına yönlendir
+    if not request.user.is_authenticated:
+        return redirect(
+            reverse_lazy("login")
+            + f"?next={reverse_lazy('add_comment', args=[post.pk])}"
+        )
     return render(request, "post_detail.html", {"form": form, "post": post})
 
 
