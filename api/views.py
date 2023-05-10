@@ -16,7 +16,7 @@ from django.urls import reverse_lazy
 
 
 from .models import Category, Comment, Post
-
+from django.db.models import Q
 
 # Create your views here.
 
@@ -173,4 +173,16 @@ def comment_delete(request, pk):
         return redirect("comments")
 
     context = {"comment": comment}
-    return render(request, "profil.html", context)
+    return render(request, "profil.html", locals())
+
+
+def search(request):
+    if request.method == "POST":
+        searched = request.POST["searched"]
+        posts = Post.objects.filter(
+            Q(title__icontains=searched) | Q(content__icontains=searched)
+        )
+        return render(request, "search_post.html", locals())
+
+    else:
+        return render(request, "login.html", locals())

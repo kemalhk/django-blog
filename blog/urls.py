@@ -39,6 +39,7 @@ urlpatterns = [
     ),
     path("comment/update/<int:pk>/", views.comment_update, name="comment_update"),
     path("comment/<int:pk>/delete/", views.comment_delete, name="comment_delete"),
+    path("search/", views.search, name="search"),
 ]
 # path("register/", views.register, name="register"),
 # path("comment/<int:pk>/update/", views.comment_update, name="comment_update"),

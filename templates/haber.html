@@ -47,56 +47,65 @@
   <!-- navbar -->
   <nav class="navbar navbar-expand-lg navbar-light bg-info">
     <div class="container-fluid">
-      
-      <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link link-light" href="/"><b>ANASAYFA</b></a>
-        </li>
-          <li class="nav-item">
-            <a class="nav-link link-light" href="{% url 'haber' %}">HABER</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link link-light" href="{% url 'makale' %}">MAKALE</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link link-light" href="{% url 'tavsiyeler' %}">TAVSİYELER</a>
-          </li>
+        
+        <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link link-light" href="/"><b>ANASAYFA</b></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link link-light" href="{% url 'haber' %}">HABER</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link link-light" href="{% url 'makale' %}">MAKALE</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link link-light" href="{% url 'tavsiyeler' %}">TAVSİYELER</a>
+                </li>
+                <!-- search bar  -->
+                <form class="d-flex" method="post" action="{%url 'search'%}">
+                    {% csrf_token %}
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="searched">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                  </form>
+        </div>
+                <!-- profil iconu ve bağlantıları -->
+                {% if user.is_authenticated %}
 
-          <!-- profil iconu ve bağlantıları -->
-          {% if user.is_authenticated %}
+                <!-- Profil ikonu -->
+                <div class="profile-icon float-right">
+                    <a href="#" role="button" id="profileDropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-user-circle fa-2x"></i>
+                    </a>
+                    <!-- Profil ikonu için açılır menü -->
+                    <div class="profile-dropdown">
+                        <a class="dropdown-item" href="{% url 'comments' %}"><i
+                                class="fa fa-sign-out"></i>Yorumlar</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{% url 'password' %}"><i class="fa fa-sign-out"></i>Şifre
+                            Değiştir</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{% url 'logout' %}"><i class="fa fa-sign-out"></i>Çıkış</a>
+                    </div>
+                </div>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link link-light" href="{% url 'login' %}">
+                        <i class="fa fa-sign-in"></i> Giriş Yap
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link link-light" href="{% url 'register' %}">
+                        <i class="fa fa-user-plus"></i> Kayıt Ol
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+            
 
-          <!-- Profil ikonu -->
-          <div class="profile-icon float-right">
-            <a href="#" role="button" id="profileDropdown" aria-haspopup="true" aria-expanded="false">
-              <i class="fas fa-user-circle fa-2x"></i>
-            </a>
-            <!-- Profil ikonu için açılır menü -->
-            <div class="profile-dropdown">
-              <a class="dropdown-item" href="{% url 'comments' %}"><i class="fa fa-sign-out"></i>Yorumlar</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="{% url 'password' %}"><i class="fa fa-sign-out"></i>Şifre Değiştir</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="{% url 'logout' %}"><i class="fa fa-sign-out"></i>Çıkış</a>
-            </div>
-          </div>
-          {% else %}
-          <li class="nav-item">
-            <a class="nav-link link-light" href="{% url 'login' %}">
-              <i class="fa fa-sign-in"></i> Giriş Yap
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link link-light" href="{% url 'register' %}">
-              <i class="fa fa-user-plus"></i> Kayıt Ol
-            </a>
-          </li>
-          {% endif %}
-        </ul>
-
-      </div>
+        
     </div>
-  </nav>
+</nav>
 
   <div class="row">
     {% for post in haber_posts %}

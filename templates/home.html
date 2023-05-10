@@ -64,7 +64,13 @@
                     <li class="nav-item">
                         <a class="nav-link link-light" href="{% url 'tavsiyeler' %}">TAVSİYELER</a>
                     </li>
-
+                    <!-- search bar  -->
+                    <form class="d-flex" method="post" action="{%url 'search'%}">
+                        {% csrf_token %}
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="searched">
+                        <button class="btn btn-outline-success" type="submit">Search</button>
+                      </form>
+            </div>
                     <!-- profil iconu ve bağlantıları -->
                     {% if user.is_authenticated %}
 
@@ -97,8 +103,9 @@
                     </li>
                     {% endif %}
                 </ul>
+                
 
-            </div>
+            
         </div>
     </nav>
 
