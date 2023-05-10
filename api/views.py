@@ -168,8 +168,6 @@ def profil_comments(request):
     return render(request, "profil.html", locals())
 
 
-##############################
-# çalışmıyor bakılıcak
 @login_required
 def comment_update(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
@@ -182,19 +180,7 @@ def comment_update(request, pk):
             comment.post = get_object_or_404(Post, pk=comment.post.pk)
             comment.save()
             return redirect("comments")
-
-    if request.method == "POST":
-        form = CommentForm(request.POST, instance=comment)
-        if form.is_valid():
-            # comment.author = request.user
-            form.save()
-            messages.success(request, "Yorum başarıyla güncellendi.")
-            return redirect("comments", locals())
-    """ else:
-        form = CommentForm(instance=comment)
-
-    context = {"form": form}
-    return render(request, "profil.html", context) """
+    return redirect("comments")
 
 
 @login_required
