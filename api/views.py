@@ -137,14 +137,15 @@ def comment_update(request, pk):
     if request.method == "POST":
         form = CommentForm(request.POST, instance=comment)
         if form.is_valid():
+            # comment.author = request.user
             form.save()
             messages.success(request, "Yorum başarıyla güncellendi.")
-            return redirect("comment_list")
+            return redirect("comments")
     else:
         form = CommentForm(instance=comment)
 
     context = {"form": form}
-    return render(request, "comment_update.html", context)
+    return render(request, "profil.html", context)
 
 
 @login_required

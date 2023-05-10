@@ -35,6 +35,7 @@ class CommentForm(forms.ModelForm):
             }
         ),
         required=True,
+        label="yorum",
     )
 
     class Meta:
