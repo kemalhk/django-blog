@@ -47,6 +47,21 @@ def login_view(request):
         return render(request, "login.html", locals())
 
 
+def user_change_password(request):
+    if request.method == "POST":
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, "Your password was successfully updated!")
+            return redirect("password")
+        else:
+            messages.error(request, "Please correct the error below.")
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, "change_password.html", locals())
+
+
 def logoutUser(request):
     # Kullanıcının tokenı varsa tokenı sil
     """if request.user.is_authenticated:
@@ -159,18 +174,3 @@ def comment_delete(request, pk):
 
     context = {"comment": comment}
     return render(request, "profil.html", context)
-
-
-def user_change_password(request):
-    if request.method == "POST":
-        form = PasswordChangeForm(request.user, request.POST)
-        if form.is_valid():
-            user = form.save()
-            update_session_auth_hash(request, user)
-            messages.success(request, "Your password was successfully updated!")
-            return redirect("password_change")
-        else:
-            messages.error(request, "Please correct the error below.")
-    else:
-        form = PasswordChangeForm(request.user)
-    return render(request, "change_password.html", {"form": form})
