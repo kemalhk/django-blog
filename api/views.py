@@ -175,17 +175,26 @@ def comment_update(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
 
     if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment.content = form.cleaned_data["yorum"]
+            comment.author = request.user
+            comment.post = get_object_or_404(Post, pk=comment.post.pk)
+            comment.save()
+            return redirect("comments")
+
+    if request.method == "POST":
         form = CommentForm(request.POST, instance=comment)
         if form.is_valid():
             # comment.author = request.user
             form.save()
             messages.success(request, "Yorum başarıyla güncellendi.")
-            return redirect("comments")
-    else:
+            return redirect("comments", locals())
+    """ else:
         form = CommentForm(instance=comment)
 
     context = {"form": form}
-    return render(request, "profil.html", context)
+    return render(request, "profil.html", context) """
 
 
 @login_required
