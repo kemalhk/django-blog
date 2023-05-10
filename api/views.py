@@ -13,10 +13,8 @@ from django.contrib.auth.decorators import login_required
 from .forms import UserRegistrationForm, CommentForm
 from django.views.generic.edit import CreateView
 from django.urls import reverse_lazy
-
-
 from .models import Category, Comment, Post
-
+from django.core.paginator import Paginator
 
 # Create your views here.
 
@@ -141,10 +139,19 @@ def add_comment_to_post(request, pk):
 def profil_comments(request):
     user = request.user
     # kullanıcının yorumlarının listlenmesi
+    # comments = Comment.objects.filter(author=user).order_by("-created_at")
     comments = Comment.objects.filter(author=user).order_by("-created_at")
+
+    # set up pagination
+    p = Paginator(Comment.objects.filter(author=user).order_by("-created_at"), 1)
+    page = request.GET.get("page")
+    comments_list = p.get_page(page)
+    nums = "a" * comments_list.paginator.num_pages
     return render(request, "profil.html", locals())
 
 
+##############################
+# çalışmıyor bakılıcak
 @login_required
 def comment_update(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
