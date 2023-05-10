@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 # from rest_framework.response import Response
 from django.template import loader
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
+from django.contrib import messages
 from django.contrib.auth.forms import UserChangeForm, PasswordChangeForm
 from django.contrib.auth.decorators import login_required
 
@@ -122,19 +123,15 @@ def add_comment_to_post(request, pk):
 
 
 @login_required
-def profil(request):
+def profil_comments(request):
     user = request.user
-    comments = Comment.objects.filter(author=user)
+    # kullanıcının yorumlarının listlenmesi
+    comments = Comment.objects.filter(author=user).order_by("-created_at")
     return render(request, "profil.html", locals())
-    """ user = request.user
-    comments = Comment.objects.filter(author=user)
-    return render(request, "profil.html", locals()) """
 
 
-""" def user_comments(request):
-    user = request.user
-    comments = Comment.objects.filter(author=user)
-    return render(request, "profil.html", {"comments": comments}) """
+def comment_update(request):
+    return (request, "profil.html", locals())
 
 
 def user_change_password(request):
@@ -150,18 +147,3 @@ def user_change_password(request):
     else:
         form = PasswordChangeForm(request.user)
     return render(request, "change_password.html", {"form": form})
-
-
-""" def add_comment_to_post(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    if request.method == "POST":
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.post = post
-            comment.author = request.user
-            comment.save()
-            return redirect("post_detail", pk=post.pk)
-    else:
-        form = CommentForm()
-    return render(request, "post_detail.html", {"form": form}) """

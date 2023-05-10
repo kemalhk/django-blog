@@ -26,7 +26,8 @@ urlpatterns = [
     path("register/", views.UserRegistrationView.as_view(), name="register"),
     path("login/", views.login_view, name="login"),
     path("logout/", views.logoutUser, name="logout"),
-    path("profil/", views.profil, name="profil"),
+    path("profil_comments/", views.profil_comments, name="comments"),
+    path("password/", views.user_change_password, name="password"),
     path("haber/", views.haber, name="haber"),
     path("makale/", views.makale, name="makale"),
     path("tavsiyeler/", views.tavsiyeler, name="tavsiyeler"),
@@ -36,5 +37,6 @@ urlpatterns = [
         views.add_comment_to_post,
         name="add_comment",
     ),
+    path("comment_update", views.comment_update, name="comment_update"),
 ]
 # path("register/", views.register, name="register"),
