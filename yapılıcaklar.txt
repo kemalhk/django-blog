@@ -1,0 +1,67 @@
+register templatesi  login e benzer şekilde düzeltilicek  sadece textbox boyhutu ayarlanıcak
+postlara resim eklenebilicek en son yapılıcak bütün işler bitince 
+profil resimi eklenebilsin
+views.py dosyasaındaki fonksiyonlar düzeltilicek
+
+
+
+
+
+
+her sayfada kendine ait olan postlar listelenicek ----- yapıldı
+postlar için template oluşturulucak --------------------- template oluşturuldu 
+listelenen postların kendi url i olucak ?????
+postların altına yorum yapma yeri gelicek
+postların altına yorum yapma yeri gelicek kullanıcı giriş yapmışsa yorum yapabilicek yapmamışsa giriş sayfasına yönlendiricek
+
+profil sayfası oluştur 
+profil sayfası
+profil ikonu oluşturuldu
+yorum yaptığı postları görebilsin 
+yorum silme 
+yorum yaptığı postları görebilsin   düzenle  butonu gelsin 
+şifre değiştirebilsin
+sayfalama işlemi
+search bar yap
+
+yorumların listelenmesi
+{% block content %}
+    <div class="container my-4">
+        <div class="row">
+            <div class="col-md-8">
+
+                <h3>Yorumlarım</h3>
+                <hr>
+                {% for comment in comments %}
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ comment.post.title }}</h5>
+                        <p class="card-text">{{ comment.content }}</p>
+                        <p class="card-subtitle text-muted">{{ comment.created_at|date:"d M,Y" }}</p>
+                    </div>
+                    <div>test</div>
+                </div>
+                {% empty %}
+                <p>Kullanıcının henüz yorumu yok.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+	
+	
+	
+	profil html 
+	 <!-- <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+          <li class="page-item"><a class="page-link" href="#">1</a></li>
+          <li class="page-item"><a class="page-link" href="#">2</a></li>
+          <li class="page-item"><a class="page-link" href="#">3</a></li>
+          <li class="page-item"><a class="page-link" href="#">Next</a></li> -->
+        
+    
+        <!-- {{comments_list}} <br>
+        Has previous: {{comments_list.has_previous}} <br>
+        has next :{{comments_list.has_next}}<br>
+        curruent page : {{comments_list.number}}<br>
+        number of pages : {{comments_list.paginator.num_pages}}
+        <hr><hr><hr><hr> -->
