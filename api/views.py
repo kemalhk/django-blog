@@ -3,7 +3,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 # from django.http import HttpResponse
 # from rest_framework.response import Response
 from django.template import loader
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
+from django.contrib.auth.forms import UserChangeForm, PasswordChangeForm
 from django.contrib.auth.decorators import login_required
 
 # from rest_framework.authtoken.models import Token
@@ -12,7 +13,7 @@ from .forms import UserRegistrationForm, CommentForm
 from django.views.generic.edit import CreateView
 from django.urls import reverse_lazy
 
-# from django.contrib.auth.forms import AuthenticationForm
+
 from .models import Category, Comment, Post
 
 
@@ -96,10 +97,6 @@ def post_detail(request, pk):
     return render(request, "post_detail.html", locals())
 
 
-def profil(request):
-    return render(request, "profil.html", locals())
-
-
 @login_required
 def add_comment_to_post(request, pk):
     post = get_object_or_404(Post, pk=pk)
@@ -122,6 +119,37 @@ def add_comment_to_post(request, pk):
             + f"?next={reverse_lazy('add_comment', args=[post.pk])}"
         )
     return render(request, "post_detail.html", {"form": form, "post": post})
+
+
+@login_required
+def profil(request):
+    user = request.user
+    comments = Comment.objects.filter(author=user)
+    return render(request, "profil.html", locals())
+    """ user = request.user
+    comments = Comment.objects.filter(author=user)
+    return render(request, "profil.html", locals()) """
+
+
+""" def user_comments(request):
+    user = request.user
+    comments = Comment.objects.filter(author=user)
+    return render(request, "profil.html", {"comments": comments}) """
+
+
+def user_change_password(request):
+    if request.method == "POST":
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, "Your password was successfully updated!")
+            return redirect("password_change")
+        else:
+            messages.error(request, "Please correct the error below.")
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, "change_password.html", {"form": form})
 
 
 """ def add_comment_to_post(request, pk):
