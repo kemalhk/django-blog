@@ -47,12 +47,12 @@
   <!-- navbar -->
   <nav class="navbar navbar-expand-lg navbar-light bg-info">
     <div class="container-fluid">
-      
+
       <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item">
             <a class="nav-link link-light" href="/"><b>ANASAYFA</b></a>
-        </li>
+          </li>
           <li class="nav-item">
             <a class="nav-link link-light" href="{% url 'haber' %}">HABER</a>
           </li>
@@ -99,7 +99,7 @@
   </nav>
 
   <div class="row">
-    {% for post in haber_posts %}
+    {% for post in haber_list %}
     <div class="col-sm-4 mb-4">
       <div class="card">
         <div class="card-body">
@@ -128,6 +128,35 @@
   </ul> 
 </div>
 {% endfor %} -->
+
+
+<!-- sayfalama işlemleri -->
+<div>
+  <nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+      {% if haber_list.has_previous %}
+      <li class="page-item"><a class="page-link" href="?page=1">&laquo First</a></li>
+      <li class="page-item"><a class="page-link" href="?page={{haber_list.previous_page_number}}">Previoust</a>
+      </li>
+      {% endif %}
+
+      {%for i in nums %}
+      <li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+
+      {%endfor%}
+
+      {% if haber_list.has_next %}
+      <li class="page-item"><a class="page-link" href="?page={{haber_list.next_page_number}}">Next</a></li>
+
+      <li class="page-item"><a class="page-link" href="?page={{haber_list.paginator.num_pages}}">Last
+          &raquo</a></li>
+      {%endif%}
+    </ul>
+  </nav>
+</div>
+
+
+
 </body>
 
 </html>

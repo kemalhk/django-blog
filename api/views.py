@@ -74,40 +74,58 @@ def logoutUser(request):
 
 def home(request):
     # anasayfada listelenicek post sayısı
-    latest_posts = Post.objects.order_by("-created_at")[:12]
-    context = {"latest_posts": latest_posts}
+    # latest_posts = Post.objects.order_by("-created_at")[:12]
+    # set up pagination
+    p = Paginator(Post.objects.order_by("-created_at"), 1)
+    page = request.GET.get("page")
+    homepage_list = p.get_page(page)
+    nums = range(1, homepage_list.paginator.num_pages + 1)
     return render(request, "home.html", locals())
 
 
 def haber(request):
     haber_category = Category.objects.filter(category_title="Haber").first()
-    # print(haber_category)
-    haber_posts = Post.objects.filter(category_title=haber_category).order_by(
-        "-created_at"
+    # set up pagination
+    p = Paginator(
+        Post.objects.filter(category_title=haber_category).order_by("-created_at"), 1
     )
-    # print(haber_posts)
+    page = request.GET.get("page")
+    haber_list = p.get_page(page)
+    nums = range(1, haber_list.paginator.num_pages + 1)
     return render(request, "haber.html", locals())
 
 
 def makale(request):
     makale_category = Category.objects.filter(category_title="Makale").first()
-    makale_posts = Post.objects.filter(category_title=makale_category).order_by(
-        "-created_at"
+    p = Paginator(
+        Post.objects.filter(category_title=makale_category).order_by("-created_at"), 1
     )
-
+    page = request.GET.get("page")
+    makale_posts = p.get_page(page)
+    nums = range(1, makale_posts.paginator.num_pages + 1)
     return render(request, "makale.html", locals())
 
 
 def tavsiyeler(request):
     tavsiyeler_category = Category.objects.filter(category_title="Tavsiyeler").first()
-    tavsiyeler_posts = Post.objects.filter(category_title=tavsiyeler_category).order_by(
-        "-created_at"
+    p = Paginator(
+        Post.objects.filter(category_title=tavsiyeler_category).order_by("-created_at"),
+        1,
     )
+    page = request.GET.get("page")
+    tavsiyeler_posts = p.get_page(page)
+    nums = range(1, tavsiyeler_posts.paginator.num_pages + 1)
     return render(request, "tavsiyeler.html", locals())
 
 
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
+    # set up pagination
+    p = Paginator(post.comments.order_by("-created_at"), 1)
+    page = request.GET.get("page")
+    post_detail_comments_list = p.get_page(page)
+    nums = range(1, post_detail_comments_list.paginator.num_pages + 1)
+
     return render(request, "post_detail.html", locals())
 
 

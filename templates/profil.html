@@ -103,19 +103,6 @@
         </div>
     </nav>
 
-
-    <nav aria-label="Page navigation example">
-        <ul class="pagination">
-          <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-          <li class="page-item"><a class="page-link" href="#">1</a></li>
-          <li class="page-item"><a class="page-link" href="#">2</a></li>
-          <li class="page-item"><a class="page-link" href="#">3</a></li>
-          <li class="page-item"><a class="page-link" href="#">Next</a></li>
-        </ul>
-      </nav>
-
-
-
     <!-- posta yapılan yorumları  listeleme  -->
     {% block content %}
     <div class="container my-4">
@@ -153,19 +140,7 @@
     <div>
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
-          <!-- <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-          <li class="page-item"><a class="page-link" href="#">1</a></li>
-          <li class="page-item"><a class="page-link" href="#">2</a></li>
-          <li class="page-item"><a class="page-link" href="#">3</a></li>
-          <li class="page-item"><a class="page-link" href="#">Next</a></li> -->
-        
-    
-        <!-- {{comments_list}} <br>
-        Has previous: {{comments_list.has_previous}} <br>
-        has next :{{comments_list.has_next}}<br>
-        curruent page : {{comments_list.number}}<br>
-        number of pages : {{comments_list.paginator.num_pages}}
-        <hr><hr><hr><hr> -->
+         
 
          {% if comments_list.has_previous %}
          <li class="page-item"><a class="page-link" href="?page=1">&laquo First</a></li>

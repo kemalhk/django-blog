@@ -113,7 +113,7 @@
         <div class="card mb-4">
           <div class="card-body">
             <h4 class="card-title">{{ post.comments.count }} yorum</h4>
-            {% for comment in post.comments.all %}
+            {% for comment in post_detail_comments_list %}
             <div class="media mb-3">
               <div class="media-body">
                 <h5 class="mt-0">{{ comment.author.username }}</h5>
@@ -142,6 +142,28 @@
       </div>
     </div>
   </div>
+
+
+  <!-- sayfalama işlemleri -->
+  <nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+        {% if post_detail_comments_list.has_previous %}
+        <li class="page-item"><a class="page-link" href="?page=1">&laquo First</a></li>
+        <li class="page-item"><a class="page-link" href="?page={{post_detail_comments_list.previous_page_number}}">Previoust</a>
+        </li>
+        {% endif %}
+        {%for i in nums %}
+        <li class="page-item"><a class="page-link" href="?page={{forloop.counter}}">{{forloop.counter}}</a></li>
+
+        {%endfor%}
+        {% if post_detail_comments_list.has_next %}
+        <li class="page-item"><a class="page-link" href="?page={{post_detail_comments_list.next_page_number}}">Next</a></li>
+
+        <li class="page-item"><a class="page-link" href="?page={{post_detail_comments_list.paginator.num_pages}}">Last
+                &raquo</a></li>
+        {%endif%}
+    </ul>
+</nav>
 
 
 
