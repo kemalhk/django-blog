@@ -37,6 +37,7 @@ urlpatterns = [
         views.add_comment_to_post,
         name="add_comment",
     ),
-    path("comment_update", views.comment_update, name="comment_update"),
+    path("comment/<int:pk>/update/", views.comment_update, name="comment_update"),
+    path("comment/<int:pk>/delete/", views.comment_delete, name="comment_delete"),
 ]
 # path("register/", views.register, name="register"),

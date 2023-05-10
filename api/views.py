@@ -130,8 +130,34 @@ def profil_comments(request):
     return render(request, "profil.html", locals())
 
 
-def comment_update(request):
-    return (request, "profil.html", locals())
+@login_required
+def comment_update(request, pk):
+    comment = get_object_or_404(Comment, pk=pk)
+
+    if request.method == "POST":
+        form = CommentForm(request.POST, instance=comment)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Yorum başarıyla güncellendi.")
+            return redirect("comment_list")
+    else:
+        form = CommentForm(instance=comment)
+
+    context = {"form": form}
+    return render(request, "comment_update.html", context)
+
+
+@login_required
+def comment_delete(request, pk):
+    comment = get_object_or_404(Comment, pk=pk)
+
+    if request.method == "POST":
+        comment.delete()
+        messages.success(request, "Yorum başarıyla silindi.")
+        return redirect("comments")
+
+    context = {"comment": comment}
+    return render(request, "profil.html", context)
 
 
 def user_change_password(request):

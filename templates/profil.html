@@ -118,10 +118,10 @@
                         <p class="card-text">{{ comment.content }}</p>
                         <p class="card-subtitle text-muted">{{ comment.created_at|date:"d M,Y" }}</p>
                         <div class="mt-3">
-                            <a href="  " class="btn btn-primary me-3">
+                            <a href=" {% url 'comment_update' comment.id %}" class="btn btn-primary me-3">
                                 <i class="fa fa-pencil"></i> Güncelle
                             </a>
-                            <form class="d-inline" action="" method="post">
+                            <form class="d-inline" action="{% url 'comment_delete' comment.id %}" method="post">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-danger" onclick="return confirm('Bu yorumu silmek istediğinizden emin misiniz?')">
                                     <i class="fa fa-trash"></i> Sil
