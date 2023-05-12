@@ -5,14 +5,18 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">    
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
-     <!-- Bootstrap CSS -->
-     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-     <!-- Font Awesome -->
-     <script src="https://kit.fontawesome.com/e81d17d39f.js" crossorigin="anonymous"></script>
-    
-    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+        crossorigin="anonymous"></script>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/e81d17d39f.js" crossorigin="anonymous"></script>
+
+
     <title>{% block title %}Register{% endblock %}</title>
     {% load django_bootstrap5 %}
     {% bootstrap_css %}
@@ -24,43 +28,44 @@
 <style>
     html,
     body {
-      height: 100%;
-    }    
+        height: 100%;
+    }
+
     .form-register {
-      width: 100%;
-      max-width: 330px;
-      padding: 15px;
-      margin: 0 auto;
+        width: 100%;
+        max-width: 330px;
+        padding: 15px;
+        margin: 0 auto;
     }
-    
+
     .form-register .checkbox {
-      font-weight: 400;
+        font-weight: 400;
     }
-    
+
     .form-register .form-control {
-      position: relative;
-      box-sizing: border-box;
-      height: auto;
-      padding: 10px;
-      font-size: 16px;
+        position: relative;
+        box-sizing: border-box;
+        height: auto;
+        padding: 10px;
+        font-size: 16px;
     }
-    
+
     .form-register .form-control:focus {
-      z-index: 2;
+        z-index: 2;
     }
-    
+
     .form-register input[type="email"] {
-      margin-bottom: -1px;
-      border-bottom-right-radius: 0;
-      border-bottom-left-radius: 0;
+        margin-bottom: -1px;
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
     }
-    
+
     .form-register input[type="password"] {
-      margin-bottom: 10px;
-      border-top-left-radius: 0;
-      border-top-right-radius: 0;
+        margin-bottom: 10px;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
     }
-    
+
 
     .form-control:focus {
         outline: none !important;
@@ -89,15 +94,15 @@
     .profile-icon:hover .profile-dropdown {
         display: block;
     }
-
-    </style>
+</style>
 
 
 <body class="text-center">
 
+    <!-- navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-info">
         <div class="container-fluid">
-            
+
             <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
@@ -115,13 +120,11 @@
                     <!-- search bar  -->
                     <form class="d-flex" method="post" action="{%url 'search'%}">
                         {% csrf_token %}
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="searched">
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"
+                            name="searched">
                         <button class="btn btn-outline-success" type="submit">Search</button>
-                      </form>
-            </div>
-                    <!-- profil iconu ve bağlantıları -->
+                    </form>
                     {% if user.is_authenticated %}
-
                     <!-- Profil ikonu -->
                     <div class="profile-icon float-right">
                         <a href="#" role="button" id="profileDropdown" aria-haspopup="true" aria-expanded="false">
@@ -151,10 +154,10 @@
                     </li>
                     {% endif %}
                 </ul>
-                
 
-            
-        </div>
+
+
+            </div>
     </nav>
 
 
@@ -162,7 +165,7 @@
 
 
     {% block content %}
-  <!-- <form class="form-register" method="post">
+    <!-- <form class="form-register" method="post">
     {% csrf_token %}
     <h1 class="h3 mb-3 font-weight-normal">Register</h1>
     <label for="inputEmail" class="sr-only">Email address</label>
@@ -181,7 +184,7 @@
   </form> -->
 
 
-    
+
 
     <!-- alttaki blok çalışıyor tasarımı düzeltmek için üst bloğu düzenlicez -->
 

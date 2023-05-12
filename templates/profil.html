@@ -11,7 +11,7 @@
         integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous" />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous">
-    </script>
+        </script>
     <!-- Font Awesome -->
     <script src="https://kit.fontawesome.com/e81d17d39f.js" crossorigin="anonymous"></script>
 </head>
@@ -47,9 +47,11 @@
 
 <body>
 
+    <!-- navbar -->
+    <!-- navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-info">
         <div class="container-fluid">
-            
+
             <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
@@ -67,13 +69,11 @@
                     <!-- search bar  -->
                     <form class="d-flex" method="post" action="{%url 'search'%}">
                         {% csrf_token %}
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="searched">
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"
+                            name="searched">
                         <button class="btn btn-outline-success" type="submit">Search</button>
-                      </form>
-            </div>
-                    <!-- profil iconu ve bağlantıları -->
+                    </form>
                     {% if user.is_authenticated %}
-
                     <!-- Profil ikonu -->
                     <div class="profile-icon float-right">
                         <a href="#" role="button" id="profileDropdown" aria-haspopup="true" aria-expanded="false">
@@ -103,12 +103,11 @@
                     </li>
                     {% endif %}
                 </ul>
-                
 
-            
-        </div>
+
+
+            </div>
     </nav>
-
 
     <!-- posta yapılan yorumları  listeleme  -->
     {% block content %}
@@ -117,7 +116,7 @@
             <div class="col-md-8">
                 <h3>Yorumlarım</h3>
                 <hr>
-                {% for comment in comments %}
+                {% for comment in comments_list %}
                 <div class="card mb-3">
                     <div class="card-body">
                         <h5 class="card-title">{{ comment.post.title }}</h5>
@@ -144,13 +143,38 @@
         </div>
     </div>
     {% endblock %}
+    <div>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
 
 
+                {% if comments_list.has_previous %}
+                <li class="page-item"><a class="page-link" href="?page=1">&laquo First</a></li>
+                <li class="page-item"><a class="page-link"
+                        href="?page={{comments_list.previous_page_number}}">Previoust</a></li>
+                {% endif %}
 
+
+                <!-- <li class="page-item disabled"><a href="#" class="page-link">page {{comments_list.number}} of {{comments_list.paginator.num_pages}}</a></li> -->
+                {%for i in nums %}
+                <li class="page-item"><a class="page-link" href="?page={{forloop.counter}}">{{forloop.counter}}</a></li>
+
+                {%endfor%}
+
+
+                {% if comments_list.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{comments_list.next_page_number}}">Next</a></li>
+
+                <li class="page-item"><a class="page-link" href="?page={{comments_list.paginator.num_pages}}">Last
+                        &raquo</a></li>
+                {%endif%}
+            </ul>
+        </nav>
+    </div>
 
 
     <!-- update modal -->
- <!--    <div class="modal fade" id="updateCommentModal" tabindex="-1" role="dialog"
+    <!--    <div class="modal fade" id="updateCommentModal" tabindex="-1" role="dialog"
 aria-labelledby="updateCommentModalLabel" aria-hidden="true">
 <div class="modal-dialog" role="document">
    <div class="modal-content">
@@ -177,46 +201,45 @@ aria-labelledby="updateCommentModalLabel" aria-hidden="true">
 
 
 
-<div class="modal fade" id="updateCommentModal" tabindex="-1" role="dialog"
-aria-labelledby="updateCommentModalLabel" aria-hidden="true">
-<div class="modal-dialog" role="document">
-   <div class="modal-content">
-       <div class="modal-header">
-           <h5 class="modal-title" id="updateCommentModalLabel">Yorum Güncelle</h5>
-           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-               <span aria-hidden="true">&times;</span>
-           </button>
-       </div>
-       <div class="modal-body">
-           <form method="post" id="updateCommentForm">
-               {% csrf_token %}
-               <div class="form-group">
-                   <label for="updateCommentContent">Yorum İçeriği</label>
-                   <textarea class="form-control" id="updateCommentContent" name="yorum"
-                             rows="3"></textarea>
-               </div>
-               <button type="submit" class="btn btn-primary">Kaydet</button>
-           </form>
-       </div>
-   </div>
-</div>
-</div>
-<!-- jQuery kütüphanesi -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    
-/*function openUpdateModal(commentId) {
-    console.log(commentId)
-   $('#updateCommentModal').modal('show');
-   $('#updateCommentForm').attr('action', '/comment/update/' + commentId + '/');
-}*/
- function openUpdateModal(commentId) {
-     console.log(commentId)
-   $('#updateCommentModal').modal('show');
-   $('#updateCommentModal form').attr('action', '/comment/update/' + commentId + '/');
+    <div class="modal fade" id="updateCommentModal" tabindex="-1" role="dialog"
+        aria-labelledby="updateCommentModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="updateCommentModalLabel">Yorum Güncelle</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" id="updateCommentForm">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="updateCommentContent">Yorum İçeriği</label>
+                            <textarea class="form-control" id="updateCommentContent" name="yorum" rows="3"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Kaydet</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- jQuery kütüphanesi -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
 
-} 
-</script>
+        /*function openUpdateModal(commentId) {
+            console.log(commentId)
+           $('#updateCommentModal').modal('show');
+           $('#updateCommentForm').attr('action', '/comment/update/' + commentId + '/');
+        }*/
+        function openUpdateModal(commentId) {
+            console.log(commentId)
+            $('#updateCommentModal').modal('show');
+            $('#updateCommentModal form').attr('action', '/comment/update/' + commentId + '/');
+
+        } 
+    </script>
 
 
 </body>

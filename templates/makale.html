@@ -6,19 +6,17 @@
     {% load bootstrap5 %}
     {% bootstrap_css %}
     {% bootstrap_javascript %}
-       <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
-  integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous" />
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
-  integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous">
-</script>
-<!-- Font Awesome -->
-<script src="https://kit.fontawesome.com/e81d17d39f.js" crossorigin="anonymous"></script>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous">
+        </script>
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/e81d17d39f.js" crossorigin="anonymous"></script>
 
 </head>
 <style>
-    
-
     .form-control:focus {
         outline: none !important;
         box-shadow: none !important;
@@ -47,11 +45,12 @@
         display: block;
     }
 </style>
+
 <body>
     <!-- navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-info">
         <div class="container-fluid">
-            
+
             <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
@@ -69,13 +68,11 @@
                     <!-- search bar  -->
                     <form class="d-flex" method="post" action="{%url 'search'%}">
                         {% csrf_token %}
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="searched">
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"
+                            name="searched">
                         <button class="btn btn-outline-success" type="submit">Search</button>
-                      </form>
-            </div>
-                    <!-- profil iconu ve bağlantıları -->
+                    </form>
                     {% if user.is_authenticated %}
-
                     <!-- Profil ikonu -->
                     <div class="profile-icon float-right">
                         <a href="#" role="button" id="profileDropdown" aria-haspopup="true" aria-expanded="false">
@@ -105,10 +102,10 @@
                     </li>
                     {% endif %}
                 </ul>
-                
 
-            
-        </div>
+
+
+            </div>
     </nav>
 
 
@@ -117,16 +114,39 @@
     <div class="row">
         {% for post in makale_posts %}
         <div class="col-sm-4 mb-4">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">{{ post.title }}</h5>
-              <p class="card-text">{{ post.content|truncatechars:50 }}</p>
-              <a href="{% url 'post_detail' pk=post.pk %}" class="btn btn-primary">Makaleye Git</a>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ post.title }}</h5>
+                    <p class="card-text">{{ post.content|truncatechars:50 }}</p>
+                    <a href="{% url 'post_detail' pk=post.pk %}" class="btn btn-primary">Makaleye Git</a>
+                </div>
             </div>
-          </div>
         </div>
         {% endfor %}
-      </div>
+    </div>
+
+
+    <!-- sayfalama işlemleri -->
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            {% if makale_posts.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page=1">&laquo First</a></li>
+            <li class="page-item"><a class="page-link" href="?page={{makale_posts.previous_page_number}}">Previoust</a>
+            </li>
+            {% endif %}
+            {%for i in nums %}
+            <li class="page-item"><a class="page-link" href="?page={{forloop.counter}}">{{forloop.counter}}</a></li>
+
+            {%endfor%}
+            {% if makale_posts.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{makale_posts.next_page_number}}">Next</a></li>
+
+            <li class="page-item"><a class="page-link" href="?page={{makale_posts.paginator.num_pages}}">Last
+                    &raquo</a></li>
+            {%endif%}
+        </ul>
+    </nav>
+    </div>
 
 </body>
 

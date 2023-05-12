@@ -6,14 +6,14 @@
     {% load bootstrap5 %}
     {% bootstrap_css %}
     {% bootstrap_javascript %}
-       <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
-  integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous" />
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
-  integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous">
-</script>
-<!-- Font Awesome -->
-<script src="https://kit.fontawesome.com/e81d17d39f.js" crossorigin="anonymous"></script>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous">
+        </script>
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/e81d17d39f.js" crossorigin="anonymous"></script>
 
 </head>
 <style>
@@ -45,11 +45,13 @@
         display: block;
     }
 </style>
+
 <body>
-     <!-- navbar -->
-     <nav class="navbar navbar-expand-lg navbar-light bg-info">
+    <!-- navbar -->
+    <!-- navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-info">
         <div class="container-fluid">
-            
+
             <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
@@ -67,29 +69,32 @@
                     <!-- search bar  -->
                     <form class="d-flex" method="post" action="{%url 'search'%}">
                         {% csrf_token %}
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="searched">
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"
+                            name="searched">
                         <button class="btn btn-outline-success" type="submit">Search</button>
-                      </form>
-            </div>
-                    <!-- profil iconu ve bağlantıları -->
+                    </form>
                     {% if user.is_authenticated %}
+                    <li class="justify-content-end nav-item ms-3">
 
-                    <!-- Profil ikonu -->
-                    <div class="profile-icon float-right">
-                        <a href="#" role="button" id="profileDropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-user-circle fa-2x"></i>
-                        </a>
-                        <!-- Profil ikonu için açılır menü -->
-                        <div class="profile-dropdown">
-                            <a class="dropdown-item" href="{% url 'comments' %}"><i
-                                    class="fa fa-sign-out"></i>Yorumlar</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="{% url 'password' %}"><i class="fa fa-sign-out"></i>Şifre
-                                Değiştir</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="{% url 'logout' %}"><i class="fa fa-sign-out"></i>Çıkış</a>
+
+                        <!-- Profil ikonu -->
+                        <div class="profile-icon d-flex justify-content-end  ">
+                            <a href="#" role="button" id="profileDropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-user-circle fa-2x"></i>
+                            </a>
+                            <!-- Profil ikonu için açılır menü -->
+                            <div class="profile-dropdown justify-content-end">
+                                <a class="dropdown-item" href="{% url 'comments' %}"><i
+                                        class="fa fa-sign-out"></i>Yorumlar</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="{% url 'password' %}"><i class="fa fa-sign-out"></i>Şifre
+                                    Değiştir</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="{% url 'logout' %}"><i
+                                        class="fa fa-sign-out"></i>Çıkış</a>
+                            </div>
                         </div>
-                    </div>
+                    </li>
                     {% else %}
                     <li class="nav-item">
                         <a class="nav-link link-light" href="{% url 'login' %}">
@@ -103,16 +108,133 @@
                     </li>
                     {% endif %}
                 </ul>
-                
 
-            
+
+
+            </div>
         </div>
+
     </nav>
+    <!--  as -->
+    <!--  -->
+    <!--  -->
+    <!--  -->
 
- <!-- post listeleme  -->
+    <!--  -->
+    <!-- 
 
- <div class="row">
-    {% for post in posts %}
+ -->
+    <div class="container">
+        <h1>Search Results</h1>
+        {% if search_list %}
+        <p>{{ search_list.paginator.count }} result{{ search_list.paginator.count|pluralize }} for "{{ searched }}"</p>
+        <div class="row">
+            {% for post in search_list %}
+            <div class="col-sm-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ post.title }}</h5>
+                        <p class="card-text">{{ post.content|truncatechars:50 }}</p>
+                        <p class="card-text">Author: {{ post.author }}</p>
+                        <p class="card-text">Created at: {{ post.created_at }}</p>
+                        <a href="{% url 'post_detail' pk=post.pk %}" class="btn btn-primary">Detaylı Oku</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% if search_list.has_other_pages %}
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                {% if search_list.has_previous %}
+                <li class="page-item"><a class="page-link" href="?searched={{ searched }}&page=1">&laquo; First</a></li>
+                <li class="page-item"><a class="page-link"
+                        href="?searched={{ searched }}&page={{ search_list.previous_page_number }}">Previous</a>
+                </li>
+                {% endif %}
+                {% for i in search_list.paginator.page_range %}
+                {% if search_list.number == i %}
+                <li class="page-item active"><a class="page-link" href="#">{{ i }} <span
+                            class="sr-only">(current)</span></a></li>
+                {% else %}
+                <li class="page-item"><a class="page-link" href="?searched={{ searched }}&page={{ i }}">{{ i }}</a></li>
+                {% endif %}
+                {% endfor %}
+                {% if search_list.has_next %}
+                <li class="page-item"><a class="page-link"
+                        href="?searched={{ searched }}&page={{ search_list.next_page_number }}">Next</a></li>
+                <li class="page-item"><a class="page-link"
+                        href="?searched={{ searched }}&page={{ search_list.paginator.num_pages }}">Last &raquo;</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+        {% else %}
+        <p>No results found for "{{ searched }}".</p>
+        {% endif %}
+    </div>
+
+
+    <!-- <div class="container">
+        <h1>Search Results</h1>
+        {% if search_list %}
+        <p>{{ search_list.paginator.count }} result{{ search_list.paginator.count|pluralize }} for "{{ searched }}"</p>
+        <div class="row">
+            {% for post in search_list %}
+            <div class="col-sm-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ post.title }}</h5>
+                        <p class="card-text">{{ post.content|truncatechars:50 }}</p>
+                        <p class="card-text">Author: {{ post.author }}</p>
+                        <p class="card-text">Created at: {{ post.created_at }}</p>
+                        <a href="{% url 'post_detail' pk=post.pk %}" class="btn btn-primary">Detaylı Oku</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% if search_list.has_other_pages %}
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                {% if search_list.has_previous %}
+                <li class="page-item"><a class="page-link" href="?searched={{ searched }}&page=1">&laquo; First</a></li>
+                <li class="page-item"><a class="page-link"
+                        href="?searched={{ searched }}&page={{ search_list.previous_page_number }}">Previous</a>
+                </li>
+                {% endif %}
+                {% for i in search_list.paginator.page_range %}
+                {% if search_list.number == i %}
+                <li class="page-item active"><a class="page-link" href="#">{{ i }} <span
+                            class="sr-only">(current)</span></a></li>
+                {% else %}
+                <li class="page-item"><a class="page-link" href="?searched={{ searched }}&page={{ i }}">{{ i }}</a></li>
+                {% endif %}
+                {% endfor %}
+                {% if search_list.has_next %}
+                <li class="page-item"><a class="page-link"
+                        href="?searched={{ searched }}&page={{ search_list.next_page_number }}">Next</a></li>
+                <li class="page-item"><a class="page-link"
+                        href="?searched={{ searched }}&page={{ search_list.paginator.num_pages }}">Last &raquo;</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+        {% else %}
+        <p>No results found for "{{ searched }}".</p>
+        {% endif %}
+    </div> -->
+
+
+
+    <!-- 
+
+
+  -->
+    <!-- post listeleme  -->
+
+    <!-- <div class="row">
+    {% for post in search_list %}
     <div class="col-sm-4 mb-4">
       <div class="card">
         <div class="card-body">
@@ -125,9 +247,30 @@
       </div>
     </div>
     {% endfor %}
-  </div>
+  </div> -->
+
+    <!-- sayfalama işlemleri -->
+    <!-- <nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+        {% if search_list.has_previous %}
+        <li class="page-item"><a class="page-link" href="?page=1">&laquo First</a></li>
+        <li class="page-item"><a class="page-link" href="?page={{search_list.previous_page_number}}">Previoust</a>
+        </li>
+        <li><a class="page-link" href="?page={{ search_list.previous_page_number }}">&laquo; asdfafdsgfadsg</a></li>
+        {% endif %}
+        {%for i in nums %}
+        <li class="page-item"><a class="page-link" href="?page={{forloop.counter}}">{{forloop.counter}}</a></li>
+
+        {%endfor%}
+        {% if search_list.has_next %}
+        <li class="page-item"><a class="page-link" href="?page={{search_list.next_page_number}}">Next</a></li>
+
+        <li class="page-item"><a class="page-link" href="?page={{search_list.paginator.num_pages}}">Last
+                &raquo</a></li>
+        {%endif%}
+    </ul>
+</nav> -->
 
 </body>
 
 </html>
-

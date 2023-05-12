@@ -12,11 +12,12 @@ from django.contrib.auth.decorators import login_required
 # from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from .forms import UserRegistrationForm, CommentForm
 from django.views.generic.edit import CreateView
-from django.urls import reverse_lazy
-
-
+from django.urls import reverse_lazy, reverse
 from .models import Category, Comment, Post
+from django.core.paginator import Paginator
 from django.db.models import Q
+from urllib.parse import urlencode
+
 
 # Create your views here.
 
@@ -76,40 +77,58 @@ def logoutUser(request):
 
 def home(request):
     # anasayfada listelenicek post sayısı
-    latest_posts = Post.objects.order_by("-created_at")[:12]
-    context = {"latest_posts": latest_posts}
+    # latest_posts = Post.objects.order_by("-created_at")[:12]
+    # set up pagination
+    p = Paginator(Post.objects.order_by("-created_at"), 4)
+    page = request.GET.get("page")
+    homepage_list = p.get_page(page)
+    nums = range(1, homepage_list.paginator.num_pages + 1)
     return render(request, "home.html", locals())
 
 
 def haber(request):
     haber_category = Category.objects.filter(category_title="Haber").first()
-    # print(haber_category)
-    haber_posts = Post.objects.filter(category_title=haber_category).order_by(
-        "-created_at"
+    # set up pagination
+    p = Paginator(
+        Post.objects.filter(category_title=haber_category).order_by("-created_at"), 1
     )
-    # print(haber_posts)
+    page = request.GET.get("page")
+    haber_list = p.get_page(page)
+    nums = range(1, haber_list.paginator.num_pages + 1)
     return render(request, "haber.html", locals())
 
 
 def makale(request):
     makale_category = Category.objects.filter(category_title="Makale").first()
-    makale_posts = Post.objects.filter(category_title=makale_category).order_by(
-        "-created_at"
+    p = Paginator(
+        Post.objects.filter(category_title=makale_category).order_by("-created_at"), 1
     )
-
+    page = request.GET.get("page")
+    makale_posts = p.get_page(page)
+    nums = range(1, makale_posts.paginator.num_pages + 1)
     return render(request, "makale.html", locals())
 
 
 def tavsiyeler(request):
     tavsiyeler_category = Category.objects.filter(category_title="Tavsiyeler").first()
-    tavsiyeler_posts = Post.objects.filter(category_title=tavsiyeler_category).order_by(
-        "-created_at"
+    p = Paginator(
+        Post.objects.filter(category_title=tavsiyeler_category).order_by("-created_at"),
+        1,
     )
+    page = request.GET.get("page")
+    tavsiyeler_posts = p.get_page(page)
+    nums = range(1, tavsiyeler_posts.paginator.num_pages + 1)
     return render(request, "tavsiyeler.html", locals())
 
 
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
+    # set up pagination
+    p = Paginator(post.comments.order_by("-created_at"), 1)
+    page = request.GET.get("page")
+    post_detail_comments_list = p.get_page(page)
+    nums = range(1, post_detail_comments_list.paginator.num_pages + 1)
+
     return render(request, "post_detail.html", locals())
 
 
@@ -141,10 +160,19 @@ def add_comment_to_post(request, pk):
 def profil_comments(request):
     user = request.user
     # kullanıcının yorumlarının listlenmesi
+    # comments = Comment.objects.filter(author=user).order_by("-created_at")
     comments = Comment.objects.filter(author=user).order_by("-created_at")
+
+    # set up pagination
+    p = Paginator(Comment.objects.filter(author=user).order_by("-created_at"), 1)
+    page = request.GET.get("page")
+    comments_list = p.get_page(page)
+    nums = "a" * comments_list.paginator.num_pages
     return render(request, "profil.html", locals())
 
 
+##############################
+# çalışmıyor bakılıcak
 @login_required
 def comment_update(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
@@ -173,16 +201,120 @@ def comment_delete(request, pk):
         return redirect("comments")
 
     context = {"comment": comment}
-    return render(request, "profil.html", locals())
+    return render(request, "profil.html", context)
 
 
 def search(request):
+    searched = ""
+    search_list = []
+
     if request.method == "POST":
         searched = request.POST["searched"]
         posts = Post.objects.filter(
             Q(title__icontains=searched) | Q(content__icontains=searched)
         )
+        p = Paginator(posts, 1)
+        page_number = request.GET.get("page")
+        search_list = p.get_page(page_number)
+
+        if len(posts) == 0:
+            messages.info(request, 'No results found for "{}"'.format(searched))
+
+        # URL'ye arama terimini de eklemek için encode işlemi
+        query = urlencode({"searched": searched})
+        url = reverse("search") + "?" + query
+        return redirect(url)
+
+    else:
+        if "searched" in request.GET:
+            searched = request.GET["searched"]
+            search_list = Paginator(
+                Post.objects.filter(
+                    Q(title__icontains=searched) | Q(content__icontains=searched)
+                ),
+                1,
+            ).get_page(request.GET.get("page"))
+        return render(
+            request,
+            "search_post.html",
+            {"search_list": search_list, "searched": searched},
+        )
+
+
+"""def search(request):
+    def search(request):
+    if request.method == "POST":
+        searched = request.POST["searched"]
+        posts = Post.objects.filter(
+            Q(title__icontains=searched) | Q(content__icontains=searched)
+        )
+        p = Paginator(posts, 1)
+        page_number = request.GET.get("page")
+        search_list = p.get_page(page_number)
+        if len(posts) == 0:
+            messages.info(request, 'No results found for "{}"'.format(searched))
+        return render(
+            request,
+            "search_post.html",
+            {"search_list": search_list, "searched": searched},
+        )
+
+    else:
+        return render(request, "search_post.html")
+    """
+
+
+""" def search(request):
+    searched = request.GET.get("searched")
+    posts = Post.objects.filter(
+        Q(title__icontains=searched) | Q(content__icontains=searched)
+    )
+    p = Paginator(posts, 1)
+
+    if request.method == "POST":
+        page = request.POST.get("page")
+    else:
+        page = request.GET.get("page")
+
+    search_list = p.get_page(page)
+    nums = range(1, search_list.paginator.num_pages + 1)
+    return render(request, "search_post.html", locals()) """
+
+
+""" def search(request):
+    if request.method == "POST":
+        searched = request.POST["searched"]
+    else:
+        searched = request.GET.get["searched"]
+    posts = Post.objects.filter(
+        Q(title__icontains=searched) | Q(content__icontains=searched)
+    )
+    p = Paginator(posts, 1)
+
+    if request.method == "POST":
+        page = request.POST.get("page")
+    else:
+        page = request.GET.get("page")
+
+    search_list = p.get_page(page)
+    nums = range(1, search_list.paginator.num_pages + 1)
+    return render(request, "search_post.html", locals()) """
+
+
+""" def search(request):
+    if request.method == "POST":
+        searched = request.POST["searched"]
+        p = Paginator(
+            Post.objects.filter(
+                Q(title__icontains=searched) | Q(content__icontains=searched)
+            ),
+            1,
+        )
+
+        page = request.GET.get("page")
+        search_list = p.get_page(page)
+        nums = range(1, search_list.paginator.num_pages + 1)
         return render(request, "search_post.html", locals())
 
     else:
-        return render(request, "login.html", locals())
+        return render(request, "search_post.html", locals()) """
